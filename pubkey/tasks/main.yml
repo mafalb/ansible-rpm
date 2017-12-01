@@ -1,0 +1,13 @@
+---
+
+- name: get fingerprint of {{ pubkey }}
+  command: gpg --dry-run --no-options --with-fingerprint {{ pubkey }}
+  failed_when: result.rc != 2 and result.rc != 0
+  check_mode: no
+  changed_when: no
+  register: result
+
+- name: register {{ pubkey }}
+  rpm_key:
+    key: "{{ pubkey }}"
+  when: result.stdout_lines[1].endswith(fingerprint)
