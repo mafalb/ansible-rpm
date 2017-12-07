@@ -1,13 +1,22 @@
 ---
 
-- name: get fingerprint of {{ pubkey }}
-  command: gpg --dry-run --no-options --with-fingerprint {{ pubkey }}
+- name: "{{ dest }}"
+  template:
+    src: "{{ item }}"
+    dest: "{{ dest }}"
+  with_first_found:
+      - "{{ playbook_dir }}/templates/{{ key_src }}"
+      - "{{ key_src }}"
+  when: key_src != 'dummy'
+ 
+- name: get fingerprint of {{ dest }}
+  command: gpg --dry-run --no-options --with-fingerprint {{ dest }}
   failed_when: result.rc != 2 and result.rc != 0
   check_mode: no
   changed_when: no
   register: result
 
-- name: register {{ pubkey }}
+- name: register {{ dest }}
   rpm_key:
-    key: "{{ pubkey }}"
+    key: "{{ dest }}"
   when: result.stdout_lines[1].endswith(fingerprint)
