@@ -1,7 +1,5 @@
 ---
 
-- debug: msg={{ key_src }}
-
 - name: "{{ dest }}"
   template:
     src: "{{ item }}"
@@ -17,8 +15,6 @@
   check_mode: no
   changed_when: no
   register: result
-
-- debug: msg={{result}}
 
 - name: register {{ dest }}
   rpm_key:
