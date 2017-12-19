@@ -1,0 +1,22 @@
+---
+
+- name: "{{ rpm }} is already installed"
+  command: rpm -q {{ rpm }}
+  args:
+    warn: no
+  check_mode: no
+  changed_when: no
+  failed_when: no
+  register: rpm_is_installed
+
+- name: copy {{ rpm }}
+  copy:
+    src: "{{ rpm_src }}"
+    dest: "{{ rpm_dest }}"
+  when: rpm_is_installed.rc == 1
+
+- name: "{{ rpm }} is installed"
+  command: yum localinstall -y {{ rpm_dest }}
+  args:
+    warn: no
+  check_mode: no
