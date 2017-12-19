@@ -1,5 +1,7 @@
 ---
 
+- debug: msg={{ key_src }}
+
 - name: "{{ dest }}"
   template:
     src: "{{ item }}"
@@ -16,7 +18,10 @@
   changed_when: no
   register: result
 
+- debug: msg={{result}}
+
 - name: register {{ dest }}
   rpm_key:
     key: "{{ dest }}"
-  when: result.stdout_lines[1].endswith(fingerprint)
+  when: result.stdout_lines != []
+  when: result.rc == 0 and result.stdout_lines[1].endswith(fingerprint)
