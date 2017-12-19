@@ -23,5 +23,4 @@
 - name: register {{ dest }}
   rpm_key:
     key: "{{ dest }}"
-  when: result.stdout_lines != []
   when: result.rc == 0 and result.stdout_lines[1].endswith(fingerprint)
