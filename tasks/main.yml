@@ -20,3 +20,4 @@
   args:
     warn: no
   check_mode: no
+  when: rpm_is_installed.rc == 1
