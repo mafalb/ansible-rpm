@@ -13,6 +13,16 @@
     warn: no
   register: rpm_is_installed
 
+- name: debug rpm_is_installed
+  when:
+    - rpm_src.endswith('.rpm')
+    - not rpm_src.startswith('https://')
+    - not rpm_src.startswith('http://')
+  debug: var=rpm_is_installed
+  tags:
+    - debug
+    - never
+
 - name: copy {{ rpm }}
   when:
     - rpm_src.endswith('.rpm')
